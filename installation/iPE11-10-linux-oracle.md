@@ -1,5 +1,5 @@
 # TIBCO iProcess Engine 11.10.0 — Installation Guide
-**Target:** CentOS Stream 9 (64-bit) | Oracle 19 | TIBCO EMS
+**Target:** CentOS Stream 9 / RHEL 9 (64-bit) | Oracle 19 | TIBCO EMS
 
 ---
 
@@ -36,7 +36,7 @@ TIBCO iProcess Engine consists of a set of background server processes that run 
 
 ### System requirements (confirmed for your platform)
 
-- **OS:** CentOS Stream 9.x (64-bit) ✓
+- **OS:** CentOS Stream 9.x / RHEL 9.x (64-bit) ✓
 - **Database:** Oracle 19 ✓
 - **Disk space (installation set extract):** ~697 MB + ~1 GB for `$SWDIR` + Oracle tablespace
 - **Oracle Client:** Must be installed on the iProcess Engine host to connect remotely to Oracle 19 at `<ORACLE_DB_HOST_OR_IP>`
@@ -82,7 +82,7 @@ TIBCO iProcess Engine consists of a set of background server processes that run 
 # Install Korn Shell (must be ksh, not pdksh)
 sudo dnf install -y ksh
 
-# Installer prerequisite services (CentOS/RHEL equivalent of rpcbind + nfs-common)
+# Installer prerequisite services (CentOS Stream 9 / RHEL 9 equivalent of rpcbind + nfs-common)
 sudo dnf install -y rpcbind nfs-utils
 sudo systemctl enable --now rpcbind
 
@@ -92,7 +92,7 @@ rpcinfo -p localhost
 
 # Install Oracle Instant Client or full Oracle Client (to connect to remote Oracle 19)
 # Download oracle-instantclient-basic, oracle-instantclient-sqlplus
-# from Oracle's website for RHEL 9 / x86_64, then install:
+# from Oracle's website for CentOS Stream 9 / RHEL 9 x86_64, then install:
 sudo dnf install -y oracle-instantclient19.*.x86_64  # adjust version
 ```
 
@@ -345,7 +345,7 @@ cd /tmp/ipe_install
 ./swinstall
 ```
 
-> If you get `Please install rpcbind and nfs-common packages...`, on CentOS/RHEL run:
+> If you get `Please install rpcbind and nfs-common packages...`, on CentOS Stream 9 / RHEL 9 run:
 >
 > ```bash
 > sudo dnf install -y rpcbind nfs-utils
@@ -648,7 +648,7 @@ Expected processes (visible via `ps aux | grep sw`):
 
 ## Important Notes
 
-1. **Oracle 19 with TNS (remote):** Since Oracle is on a separate server, you must install Oracle Instant Client (or full client) on the CentOS host and configure `tnsnames.ora` before running the installer. The `ORACLE_SID` environment variable should be set to a dummy value; the actual connection uses the TNS identifier.
+1. **Oracle 19 with TNS (remote):** Since Oracle is on a separate server, you must install Oracle Instant Client (or full client) on the CentOS Stream 9 or RHEL 9 host and configure `tnsnames.ora` before running the installer. The `ORACLE_SID` environment variable should be set to a dummy value; the actual connection uses the TNS identifier.
 
 2. **EMS JARs must be present before or right after installation:** The `iapjms` process won't start without `tibjms.jar`. Copy the JARs from your EMS installation.
 
@@ -660,7 +660,7 @@ Expected processes (visible via `ps aux | grep sw`):
 
 6. **In-product (file-based) activation prerequisite:** Install **TIBCO iProcess Engine Hotfix 1** before using in-product activation (`swadm LICENSE_IMPORT`).
 
-7. **Korn shell:** CentOS Stream 9 does not include `ksh` by default. Install it with `dnf install ksh` before running the installer.
+7. **Korn shell:** CentOS Stream 9 and RHEL 9 do not include `ksh` by default. Install it with `dnf install ksh` before running the installer.
 
 8. **SPO server not starting (name resolution/case check):** If the SPO server does not start, check the value of `MACHINE_NAME` from `swadm show_servers`. If `MACHINE_NAME` is uppercase, hostname resolution may fail. Verify this with `ping <MACHINE_NAME>`. If the case is incorrect, update it in the database under schema `SWPRO`, table `NODE_CLUSTER`.
 
